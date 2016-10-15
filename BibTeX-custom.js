@@ -1,6 +1,6 @@
 {
-	"translatorID": "9cb70025-a888-4a29-a210-93ec52da40d4",
-	"label": "BibTeX",
+	"translatorID": "629b3327-5034-4a1b-866e-be487acb8cba",
+	"label": "BibTeX-custom",
 	"creator": "Simon Kornblith, Richard Karnesky and Emiliano heyns",
 	"target": "bib",
 	"minVersion": "2.1.9",
@@ -1073,13 +1073,13 @@ var citeKeyConversions = {
 		if(item.creators && item.creators[0] && item.creators[0].lastName) {
 			return item.creators[0].lastName.toLowerCase().replace(/ /g,"_").replace(/,/g,"");
 		}
-		return "";
+		return "xxxx";
 	},
 	"t":function (flags, item) {
 		if (item["title"]) {
 			return item["title"].toLowerCase().replace(citeKeyTitleBannedRe, "").split(/\s+/g)[0];
 		}
-		return "";
+		return "xxxx";
 	},
 	"y":function (flags, item) {
 		if(item.date) {
@@ -1088,7 +1088,7 @@ var citeKeyConversions = {
 				return date.year;
 			}
 		}
-		return "????";
+		return "xxxx";
 	}
 }
 
