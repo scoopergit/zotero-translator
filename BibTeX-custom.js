@@ -921,6 +921,7 @@ function writeField(field, value, isMacro) {
 	}
 	//convert the HTML markup allowed in Zotero for rich text to TeX; excluding doi/url/file shouldn't be necessary, but better to be safe;
 	if (!((field == "url") || (field == "doi") || (field == "file"))) value = mapHTMLmarkup(value);
+	if ((field == "url") || ((field == "howpublished")) && (value.startsWith("http"))) value = "\\biburl{"+value+"}";
 	Zotero.write(value);
 	if (!isMacro) Zotero.write("}");
 }
@@ -1092,7 +1093,6 @@ var citeKeyConversions = {
 	}
 }
 
-
 function buildCiteKey (item,citekeys) {
 	var basekey = "";
 	var counter = 0;
@@ -1181,11 +1181,19 @@ function doExport() {
 		// write citation key
 		Zotero.write((first ? "" : "\n\n") + "@"+type+"{"+citekey);
 		first = false;
+
+		if((!item.creators || !item.creators.length) && item.title) {
+			writeField("key", item.title);
+		}
 		
 		for(var field in fieldMap) {
 			if(item[fieldMap[field]]) {
 				writeField(field, item[fieldMap[field]]);
 			}
+		}
+
+		if(item.itemType == "webpage" && item.url) {
+			writeField("howpublished", item.url);
 		}
 
 		if(item.reportNumber || item.issue || item.seriesNumber || item.patentNumber) {
