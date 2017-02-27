@@ -165,13 +165,10 @@ function extraFieldsToString(extra) {
 }
 
 function thesisType(item) {
-	if (item.type.toLowerCase() == "master's" || item.type.toLowerCase() == "masters") {
+	if (item.type && (item.type.toLowerCase() == "master's" || item.type.toLowerCase() == "masters")) {
 		return "mastersthesis";
 	}
-	if (item.type.toLowerCase() == "phd") {
-		return "phdthesis";
-	}
-	return "unknownthesis";
+	return "phdthesis";
 }
 
 var inputFieldMap = {
@@ -1085,7 +1082,7 @@ var numberRe = /^[0-9]+/;
 // Also remove markup
 var citeKeyTitleBannedRe = /\b(a|an|the|some|from|on|in|to|of|do|with|der|die|das|ein|eine|einer|eines|einem|einen|un|une|la|le|l\'|el|las|los|al|uno|una|unos|unas|de|des|del|d\')(\s+|\b)|(<\/?(i|b|sup|sub|sc|span style=\"small-caps\"|span)>)/g;
 var citeKeyConversionsRe = /%([a-zA-Z])/;
-var citeKeyCleanRe = /[^a-z0-9\!\$\&\*\+\-\.\/\:\;\<\>\?\[\]\^\_\`\|]+/g;
+var citeKeyCleanRe = /[^a-z0-9\_]+/g;
 
 var citeKeyConversions = {
 	"a":function (flags, item) {
@@ -1191,7 +1188,7 @@ function doExport() {
 
 		// determine type
 		var type = zotero2bibtexTypeMap[item.itemType];
-		if (typeof(type) == "function") { type = type(item); }
+		if(typeof(type) == "function") { type = type(item); }
 		if(!type) type = "misc";
 		
 		// create a unique citation key
@@ -1435,6 +1432,9 @@ function doExport() {
 		}
 		
 		Zotero.write("\n}");
+	}
+	if(!first) {
+		Zotero.write("\n");
 	}
 }
 
