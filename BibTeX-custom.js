@@ -1082,20 +1082,20 @@ var numberRe = /^[0-9]+/;
 // Also remove markup
 var citeKeyTitleBannedRe = /\b(a|an|the|some|from|on|in|to|of|do|with|der|die|das|ein|eine|einer|eines|einem|einen|un|une|la|le|l\'|el|las|los|al|uno|una|unos|unas|de|des|del|d\')(\s+|\b)|(<\/?(i|b|sup|sub|sc|span style=\"small-caps\"|span)>)/g;
 var citeKeyConversionsRe = /%([a-zA-Z])/;
-var citeKeyCleanRe = /[^a-z0-9\_]+/g;
+var citeKeyCleanRe = /[^a-z0-9\!\$\&\*\+\-\.\/\:\;\<\>\?\[\]\^\_\`\|]+/g;
 
 var citeKeyConversions = {
 	"a":function (flags, item) {
 		if(item.creators && item.creators[0] && item.creators[0].lastName) {
 			return item.creators[0].lastName.toLowerCase().replace(/ /g,"_").replace(/,/g,"");
 		}
-		return "xxxx";
+		return "noauthor";
 	},
 	"t":function (flags, item) {
 		if (item["title"]) {
 			return item["title"].toLowerCase().replace(citeKeyTitleBannedRe, "").split(/\s+/g)[0];
 		}
-		return "xxxx";
+		return "notitle";
 	},
 	"y":function (flags, item) {
 		if(item.date) {
@@ -1104,7 +1104,7 @@ var citeKeyConversions = {
 				return date.year;
 			}
 		}
-		return "xxxx";
+		return "nodate";
 	}
 }
 
